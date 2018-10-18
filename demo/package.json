@@ -8,9 +8,9 @@
             "version": "4.2.0"
         }
     },
-    "description": "NativeScript Application",
-    "license": "SEE LICENSE IN <your-license-filename>",
-    "repository": "<fill-your-repository-here>",
+    "description": "NativeScript Xavier Passport Demo",
+    "license": "Apache",
+    "repository": "@nstudio/nativescript-xavier-passport",
     "dependencies": {
         "@nstudio/nativescript-xavier-passport": "file:../src",
         "nativescript-permissions": "^1.2.3",

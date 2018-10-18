@@ -1,9 +1,9 @@
 /*************************************************************************************
  * (c) 2018, nStudio, LLC
  *
- * Licensed under the APACHE license or contact me for a Support or Commercial License
+ * Licensed under the APACHE license
  *
- * I do contract work in most languages, so let me solve your problems!
+ * We do contract work in most languages, so let us solve your problems!
  *
  * Any questions please feel free to email me or put a issue up on the github repo
  * Version 1.0.0                                            NAnderson@nstudio.io
@@ -24,7 +24,7 @@ let requestID = 2000;
 function Passport(options) {
     if (!this instanceof Passport) { // jshint ignore:line
         //noinspection JSValidateTypes
-        return new Passport();
+        return new Passport(options);
     }
     this._callbacks = {"results": [], "error": [], "closed": []};
     this._debug = false;
