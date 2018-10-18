@@ -1,0 +1,21 @@
+{
+    "nativescript": {
+        "id": "org.nativescript.demo",
+        "tns-ios": {
+            "version": "4.2.0"
+        },
+        "tns-android": {
+            "version": "4.2.0"
+        }
+    },
+    "description": "NativeScript Application",
+    "license": "SEE LICENSE IN <your-license-filename>",
+    "repository": "<fill-your-repository-here>",
+    "dependencies": {
+        "@nstudio/nativescript-xavier-passport": "file:../src",
+        "nativescript-permissions": "^1.2.3",
+        "nativescript-theme-core": "~1.0.4",
+        "tns-core-modules": "~4.2.0"
+    },
+    "readme": "NativeScript Application"
+}

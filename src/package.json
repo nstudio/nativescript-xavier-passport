@@ -1,0 +1,42 @@
+{
+  "name": "@nstudio/nativescript-xavier-passport",
+  "version": "1.0.0",
+  "description": "A Passport/MRZ reader for NativeScript",
+  "main": "xavier",
+  "nativescript": {
+	"platforms": {
+		"android": "2.0.0",
+        "ios": "2.0.0"
+	},
+	"plugin": {
+	  "nan": "true",
+	  "pan": "true",
+	  "core3": "true",
+	  "core4": "true",
+	  "category": "Processing"
+	}
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nstudio/nativescript-xavier-passport.git"
+  },
+  "keywords": [
+    "NativeScript", "Xavier", "MRZ", "JavaScript", "Android", "iOS", "Passport"
+  ],
+  "author": {
+    "name": "Nathanael Anderson",
+    "email": "nathan@master-technology.com"
+  },
+  "bugs": {
+    "url": "https://github.com/nstudio/nativescript-xavier-passport/issues"
+  },
+  "license": {
+    "type": "APACHE",
+    "url": "https://github.com/nstudio/nativescript-xavier-passport/blob/master/LICENSE"
+  },
+  "dependencies": {
+	"nativescript-permissions": "^1.2.3"
+  },
+  "homepage": "https://github.com/nstudio/nativescript-xavier-passport",
+  "readmeFilename": "README.md"
+}

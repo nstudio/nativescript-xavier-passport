@@ -1,0 +1,7 @@
+.idea
+demo/platforms/
+demo/node_modules/
+*.tar
+*.tgz
+Xavier-Passport-MRZ-OCR-Android-Eval-SDK/
+Xavier-Passport-MRZ-OCR-iOS-Eval-SDK/
