@@ -1,6 +1,6 @@
 {
   "name": "@nstudio/nativescript-xavier-passport",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Passport/MRZ reader for NativeScript",
   "main": "xavier",
   "nativescript": {
