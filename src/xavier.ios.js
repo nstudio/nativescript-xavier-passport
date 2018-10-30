@@ -222,19 +222,13 @@ Passport.prototype.start = function() {
     xavierViewController._clientProtocol = this._delegate;
     this._delegate._debug = this._debug;
 
-    var frame = require("ui/frame");
-    const topMostFrame = frame.topmost();
-    if (topMostFrame) {
-        const viewController = topMostFrame.currentPage && topMostFrame.currentPage.ios;
-        if (viewController) {
-            // UIApplication.sharedApplication.keyWindow.rootViewController
-
+	const viewController = UIApplication.sharedApplication.keyWindow.rootViewController;
+    if (viewController) {            
              if (!UIApplication.sharedApplication.delegate.respondsToSelector("window")) {
                  throw new Error("Please see documentation on how to fix the iOS Responder");
              }
 
-             viewController.presentViewControllerAnimatedCompletion(xavierViewController, false, null);
-        }
+             viewController.presentViewControllerAnimatedCompletion(xavierViewController, false, null);        
     }
 };
 
