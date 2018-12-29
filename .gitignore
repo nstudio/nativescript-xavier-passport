@@ -1,6 +1,7 @@
 .idea
 demo/platforms/
 demo/node_modules/
+src/node_modules/
 *.tar
 *.tgz
 Xavier-Passport-MRZ-OCR-Android-Eval-SDK/
