@@ -4,4 +4,8 @@ demo/node_modules/
 *.tar
 *.tgz
 Xavier-Passport-MRZ-OCR-Android-Eval-SDK/
-Xavier-Passport-MRZ-OCR-iOS-Eval-SDK/
+Xavier-Passport-MRZ-OCR-iOS-Eval-SDK
+license.key.js
+nativescript_xavier_passport.aar
+*.zip
+package-lock.json
