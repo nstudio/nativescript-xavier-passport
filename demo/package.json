@@ -1,11 +1,12 @@
 {
     "nativescript": {
-        "id": "org.nativescript.demo",
+        "id": "global.utu.taxfreemobileapp",
+        "ids": "io.nstudio.demo.xavier",
         "tns-ios": {
             "version": "4.2.0"
         },
         "tns-android": {
-            "version": "4.2.0"
+            "version": "5.1.0"
         }
     },
     "description": "NativeScript Xavier Passport Demo",
@@ -15,7 +16,7 @@
         "@nstudio/nativescript-xavier-passport": "file:../src",
         "nativescript-permissions": "^1.2.3",
         "nativescript-theme-core": "~1.0.4",
-        "tns-core-modules": "~4.2.0"
+        "tns-core-modules": "^5.1.1"
     },
-    "readme": "NativeScript Application"
+    "readme": "NativeScript Xavier Demo Application"
 }

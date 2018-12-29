@@ -4,24 +4,29 @@
 
 # NativeScript Xavier-Passport
 
-This is a NativeScript cross platform plugin wrapping the Xavier Passport library for IOS and Android.
+This is a NativeScript cross platform plugin wrapping the Black Shark Tech Xavier library for IOS and Android.
 
 ## License
 
 Our code is 2018, nStudio, LLC.  Everything is LICENSED under the APACHE 2.0 License, meaning you are free to include this in any type of program.  
 However, the base Xavier library must be licensed from them. 
-https://github.com/BlackSharkTech/Xavier-Passport-MRZ-OCR-Android-Eval-SDK
+https://github.com/BlackSharkTech/Xavier-demo-android
 and 
-https://github.com/BlackSharkTech/Xavier-Passport-MRZ-OCR-iOS-Eval-SDK
+https://github.com/BlackSharkTech/Xavier-demo-ios
 
 
 ## Installation 
-Same plugin works on  NativeScript 2.x - 4.x
+Same plugin works on  NativeScript 2.x - 5.x
 
 Run `tns plugin add @nstudio/nativescript-xavier-passport` in your ROOT directory of your project.
 
 ## Android Required Setup
-None
+In your app/App_Resources/Android/src/main/res/AndroidManifest.xml you need to do the following:
+1. Add `xmlns:tools="http://schemas.android.com/tools"` to the `<Manifest ...`
+2. In the `<uses-sdk` change the android:minSdkVersion="XX" to at least 21.
+3. Int the `<application` add `tools:replace="android:allowBackup"`  
+![Files](../docs/xavier_android_manifest.png)
+
 
 ## iOS Required Setup
 On iOS you need to do a couple things to make everything work correctly.

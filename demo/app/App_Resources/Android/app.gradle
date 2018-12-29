@@ -8,7 +8,8 @@
 android {  
   defaultConfig {  
     generatedDensities = []
-    applicationId = "org.nativescript.demo" 
+//    applicationId = "io.nstudio.demo.xavier"
+    applicationId = "global.utu.taxfreemobileapp"
     
     //override supported platforms
     // ndk {
