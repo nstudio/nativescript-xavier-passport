@@ -1,0 +1,11 @@
+framework module xavierwrapper {
+  umbrella header "xavierwrapper.h"
+
+  export *
+  module * { export * }
+}
+
+module xavierwrapper.Swift {
+    header "xavierwrapper-Swift.h"
+    requires objc
+}

@@ -15,20 +15,19 @@ let licenseKey = "Your License Key";
 // Used for my local version; to eliminate committing my test license key to the repo.  :)
 if (licenseKey === "Your License Key") {
     try {
-        licenseKey = require("license.key.js");
+        licenseKey = require("./license.key.js");
     } catch (err) {
+        console.log("Missing key", err);
         licenseKey = "";  // No License Key
     }
 }
-
 
 // Throw an error if no license key is setup!
 if (licenseKey === "Your License Key" || licenseKey === "") {
     throw new Error("You are missing your License key");
 }
 
-
-var pp = new Passport({
+const pp = new Passport({
     "license key": licenseKey,
     "boundingBoxSearchingColor": "#FF0000",
     "instructionTextEnabled": true,
@@ -39,9 +38,8 @@ var pp = new Passport({
 // Only if you want to see lots of logging.  :)
 pp.enableDebug();
 
-
 // These are the three events exposed
-// This event is triggered when the window will be or has been closed; iOS reports this typically twice per close.
+// This event is triggered when the window will be or has been closed; iOS may report this twice per close.
 pp.on("closed", closed);
 
 // This event has all the results of the scan
@@ -50,8 +48,10 @@ pp.on("results", results);
 // This Event is when an error occurs
 pp.on("error", error);
 
+// Current fix for an IOS bug.  If they fix it; then we just don't call this function
+pp.enableCloseHack();
 
-var viewModel = new Observable();
+const viewModel = new Observable();
 
 function createViewModel() {
     viewModel.message = "";
@@ -77,10 +77,14 @@ function error(err) {
 
 function results(results) {
     console.log("Results", results);
-    var name = "Unknown";
+    let name = "Unknown";
     if (results) {
-        name = results.bearerName || results.name;
+        name = results.givenName || results.documentNumber;
     }
     viewModel.list.push({item: "Results: "+name });
+    if (results) {
+        console.log("Image Type?" , typeof results.documentImage);
+        viewModel.list.push({item: "Image: " + (results.documentImage != null ? "Yes" : "No")});
+    }
     viewModel.message = "Results: "+name;
 }

@@ -1,8 +1,0 @@
-framework module Xavier {
-      umbrella header "SCIXavierViewController.h"
-
-      export *
-
-      module * { export * }
-
-}

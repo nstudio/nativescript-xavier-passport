@@ -8,7 +8,7 @@ This is a NativeScript cross platform plugin wrapping the Black Shark Tech Xavie
 
 ## License
 
-Our code is 2018, nStudio, LLC.  Everything is LICENSED under the APACHE 2.0 License, meaning you are free to include this in any type of program.  
+Our code is 2018-2019, nStudio, LLC.  Everything is LICENSED under the APACHE 2.0 License, meaning you are free to include this in any type of program.  
 However, the base Xavier library must be licensed from them. 
 https://github.com/BlackSharkTech/Xavier-demo-android
 and 
@@ -28,42 +28,13 @@ In your app/App_Resources/Android/src/main/res/AndroidManifest.xml you need to d
 ![Files](../docs/xavier_android_manifest.png)
 
 
-## iOS Required Setup
-On iOS you need to do a couple things to make everything work correctly.
-1. You need to copy the `tessdata` folder into your `app/App_Resources/iOS` folder. 
-2. You also need to copy the `Xavier.plist` into your `app/App_Resource/iOS` folder. 
-![Files](../docs/xavier_app_resources.png)
-
-3. You need to edit the `Xavier.plist` file and add your license and email address and change any other options you might want/need to change.
-4. You need to edit the `node_modules/tns-core-modules/application/application.ios.js` file.
-
-![Path](../docs/xavier_tns-core-modules.png)   
-And replace the entire `Responder` class with this new class code:
-```js
-var Responder = UIResponder.extend({
-    get window() {
-        return this._window;
-    },
-    set window(aWindow) {
-        this._window = aWindow;
-    }
-}, {
-    protocols: [UIApplicationDelegate]
-});
-```  
-So it should when done look like this:
-
-![Source Code](../docs/xavier_application.ios.js.png)
-
-
-
 ## Usage
 
 ### Start Scanning
 ```js
 var Passport = require('nativescript-xavier-passport');
 
-var zp = new Passport({"license key":"<LICENSE_KEY>", "email address": "<EMAIL_ADDRESS>"});
+var zp = new Passport({"license key":"<LICENSE_KEY>"});
 zp.on("results", function(results) { console.log("Results:", results); });
 zp.start();
 

@@ -1,0 +1,7 @@
+target 'xavierwrapper' do
+  use_frameworks!
+  
+  pod 'TesseractOCRSDKiOS', '~> 4.0'
+  pod 'EVGPUImage2', '~> 0.2'
+
+end

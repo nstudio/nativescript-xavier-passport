@@ -1,5 +1,5 @@
 /*************************************************************************************
- * (c) 2018, nStudio, LLC
+ * (c) 2018-2019, nStudio, LLC
  *
  * Licensed under the APACHE license
  *
@@ -39,7 +39,7 @@ function Passport(options) {
     this._debug = false;
 
     // Valid options
-    this.options = {
+    const validOptions = {
         "boundingBoxSearchingColor": null,
         "boundingBoxFoundColor": null,
         "closeButtonColor": null,
@@ -57,7 +57,7 @@ function Passport(options) {
     var customization=null;
     if (options) {
         for (let key in options) {
-            if (options.hasOwnProperty(key) && this.options.hasOwnProperty(key)) {
+            if (options.hasOwnProperty(key) && validOptions.hasOwnProperty(key)) {
                 if (customization === null) {
                     customization = new com.blacksharktech.xavierlib.Customization();
                 }
@@ -67,7 +67,7 @@ function Passport(options) {
                         customization[key] = new Color(options[key]).android;
                     } else if (options[key] instanceof Color) {
                         // A NativeScript color object
-                        customization[key] = new options[key].android;
+                        customization[key] = options[key].android;
                     } else {
                         // Assume this is a native Android color
                         customization[key] = options[key];
@@ -107,6 +107,10 @@ function Passport(options) {
     this._requestID = requestID++;
 }
 
+Passport.prototype.enableCloseHack = function() {
+    /* Do Nothing; iOS only issue */
+};
+
 /**
  * Enabled debug logging
  */
@@ -144,7 +148,7 @@ Passport.prototype.removeEventListener = function(event, callback, thisArg) {
         this._callbacks[event] = [];
         return;
     }
-    for (var i=0;i<this._callbacks[event].length;i++) {
+    for (let i=0;i<this._callbacks[event].length;i++) {
         if (this._callbacks[event][i].callback === callback) {
             if (thisArg && thisArg !== this._callbacks[event][i].thisArg) { continue; }
             this._callbacks[event].splice(i, 1);  i--;

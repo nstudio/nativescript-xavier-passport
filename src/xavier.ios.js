@@ -1,94 +1,42 @@
 /**********************************************************************************
- * (c) 2018, nStudio, LLC
+ * (c) 2018-2019, nStudio, LLC
  *
  * Licensed under the APACHE license
  *
  * We do contract work in most languages, so let us solve your problems!
  *
  * Any questions please feel free to email me or put a issue up on the github repo
- * Version 1.0.0                                            NAnderson@nstudio.io
+ * Version 2.0.0                                            NAnderson@nstudio.io
  *********************************************************************************/
 "use strict";
-const application = require('application');
 
-/* global Xavier, SCIXavierClientProtocol, NSObject, SCIXavierViewController, WeakRef, UIApplication, UIDevice, UIDeviceOrientation, dispatch_async, dispatch_get_current_queue */
-/* global UIResponder, UIApplicationDelegate */
+/* global NSObject, WeakRef, UIApplication, UIDevice, UIDeviceOrientation, dispatch_async, dispatch_get_current_queue */
+/* global UIResponder, UIApplicationDelegate, XavierWrapperDelegate */
+
+const Color = require("color").Color;
+const Font = require("ui/styling/font").Font;
+
 
 
 /**
- * SCIXavierClient Delegate
+ * XavierWrapper Delegate
  */
-const SCIXavierClientDelegate = NSObject.extend({
+const XavierWDelegate = NSObject.extend({
     _owner: null,
     _debug: false,
-    onRawMrz: function(rawData) {
+    didFinishTaskWithStatusData: function(status, data) {
         if (this._debug) {
-            console.log("OnRawMRZ", rawData);
+            console.log("!!!!! Callback", status);
         }
-    },
-    onMrzCaptureCompleted:function() {
-        if (this._debug) {
-            console.log("onMrzCaptureCompleted");
-        }
-    },
-    onError: function(error) {
-        if (this._debug) {
-            console.log("onError", error);
-        }
-        let owner = this._owner.get();
+        const owner = this._owner.get();
         if (owner) {
-            runOnUIThread(owner, owner._onError, error);
-            //owner._onError(error);
-        }
-    },
-    onParsedJsonFromlMrz: function(data) {
-        if (this._debug) {
-            console.log("onParsedJsonFromlMrz", data);
-        }
-        let owner = this._owner.get();
-        if (owner) {
-            runOnUIThread(owner, owner._onResult, data);
-            //owner._onResult(data);
-        }
-    },
-    onParsedXmlFromlMrz: function(data) {
-        if (this._debug) {
-            console.log("onParsedXmlFromlMrz", data);
-        }
-    },
-    onMetrics: function(metrics) {
-        if (this._debug) {
-            console.log("onMetrics", metrics);
-        }
-    },
-    onCapturedBarcode: function(barcode) {
-        if (this._debug) {
-            console.log("onCapturedBarcode", barcode);
-        }
-    },
-    onCapturedImage: function(img) {
-        if (this._debug) {
-            console.log("Captured image");
-        }
-    },
-    onClose: function() {
-        if (this._debug) {
-            console.log("Close");
-        }
-        let owner = this._owner.get();
-        if (owner) {
-            runOnUIThread(owner, owner._onClose, null);
-            //owner._onClose();
+            if (status === true) {
+                owner._onResult(data);
+            }
+            owner._onClose();
         }
     }
-
-
-}, { protocols: [ SCIXavierClientProtocol ] });
-
-/**
- * We have to track the main NS thread because this plugin runs on a background thread...
- */
-const main_queue = dispatch_get_current_queue();
+}, { protocols: [ XavierWrapperDelegate ] });
 
 /***
  * Create a new Passport Scanner object
@@ -97,19 +45,23 @@ const main_queue = dispatch_get_current_queue();
  * @constructor
  */
 function Passport(options) {
-    this._portrait = false;
     if (!this instanceof Passport) { // jshint ignore:line
         //noinspection JSValidateTypes
         return new Passport(options);
     }
-    if (options && options["portrait mode"]) {
-        this._portrait = true;
-    }
+
     this._callbacks = {"results": [], "error": [], "closed": []};
     this._debug = false;
+    this._closeHack = false;
+    this._alreadyClosed = false;
+    this._hasClosedController = false;
 
-    this._delegate = new SCIXavierClientDelegate();
+    this._delegate = new XavierWDelegate();
     this._delegate._owner = new WeakRef(this);
+    this._options = options;
+
+    this._xavierWrapper = new xavierwrapper();
+    this._xavierWrapper.setDelegateWithDelegate(this._delegate);
 }
 
 /**
@@ -117,6 +69,13 @@ function Passport(options) {
  */
 Passport.prototype.enableDebug = function() {
     this._debug = true;
+    this._delegate._debug = true;
+    this._xavierWrapper.enableDebugging();
+};
+
+Passport.prototype.enableCloseHack = function() {
+    this._closeHack = true;
+    this._xavierWrapper.enableCloseHack();
 };
 
 /**
@@ -149,7 +108,7 @@ Passport.prototype.removeEventListener = function(event, callback, thisArg) {
         this._callbacks[event] = [];
         return;
     }
-    for (var i=0;i<this._callbacks[event].length;i++) {
+    for (let i=0;i<this._callbacks[event].length;i++) {
         if (this._callbacks[event][i].callback === callback) {
             if (thisArg && thisArg !== this._callbacks[event][i].thisArg) { continue; }
             this._callbacks[event].splice(i, 1);  i--;
@@ -166,11 +125,11 @@ Passport.prototype.removeEventListener = function(event, callback, thisArg) {
  */
 Passport.prototype._notify = function (event) {
     console.log("Notify", event);
-    var eh = this._callbacks[event];
-    var args = Array.prototype.slice.call(arguments, 1);
+    const eh = this._callbacks[event];
+    const args = Array.prototype.slice.call(arguments, 1);
     if (typeof eh !== 'undefined' && eh.length) {
-        for (var i = 0; i < eh.length; i++) {
-            var thisArg = eh[i].thisArg || this;
+        for (let i = 0; i < eh.length; i++) {
+            const thisArg = eh[i].thisArg || this;
             eh[i].callback.apply(thisArg, args);
         }
     }
@@ -187,25 +146,105 @@ Passport.prototype.on = Passport.prototype.addEventListener;
 Passport.prototype.off = Passport.prototype.removeEventListener;
 
 Passport.prototype._onClose = function() {
-        this._notify("closed");
+    if (this._closeHack && this._alreadyClosed) { return; }
+    this._close()
+    this._alreadyClosed = true;
+    this._notify("closed");
 };
 
 Passport.prototype._onError = function(err) {
-        this._notify("error", err);
+    this._notify("error", err);
 };
 
-Passport.prototype._onResult = function(rawString) {
-    const res = {raw: ""};
-    try {
-        const result = JSON.parse(rawString);
-        if (result && result.parsedMRZ && result.parsedMRZ.parsedFieldList) {
-            const pfl = result.parsedMRZ.parsedFieldList;
-            for (let i = 0; i < pfl.length; i++) {
-                res[pfl[i].name] = pfl[i].correctedValue;
+Passport.prototype.start = function() {
+    // Clear the already closed flag on each "start"
+    this._alreadyClosed = false;
+    this._hasClosedController = false;
+
+    if (!this._options || !this._options["license key"]) {
+        this._onError("Missing License key");
+        this._onClose();
+        return false;
+    }
+
+
+    const validOptions = {
+        "boundingBoxSearchingColor": null,
+        "boundingBoxFoundColor": null,
+        "closeButtonColor": null,
+        "flashOnButtonColor": null,
+        "flashOffButtonColor": null,
+        "flashButtonEnabled": null,
+        "instructionTextEnabled": null,
+        "instructionText": null,
+        "instructionTextColor": null,
+        "instructionTextFont": null,
+        "cameraNegativeSpaceBackgroundEnabled": null,
+        "cameraNegativeSpaceBackgroundColor": null,
+    };
+
+    let customization = {};
+    if (this._options) {
+        for (let key in this._options) {
+            if (this._options.hasOwnProperty(key) && validOptions.hasOwnProperty(key)) {
+                if (key.indexOf("Color") > 0) {
+                    if (typeof this._options[key] === "string") {
+                        // A String value - i.e. "#112233";
+                        customization[key] = new Color(this._options[key]).ios;
+                    } else if (this._options[key] instanceof Color) {
+                        // A NativeScript color object
+                        customization[key] = this._options[key].ios;
+                    } else {
+                        // Assume this is a native ios color
+                        customization[key] = this._options[key];
+                    }
+                } else if (key.indexOf("Enabled") > 0) {
+                    // Force Boolean value
+                    customization[key] = !!this._options[key];
+                } else if (key.indexOf("Font") > 0) {
+                    if (typeof this._options[key] === "string") {
+                        customization[key] = new Font(this._options[key], undefined, "normal", "normal").getUIFont({pointSize: 18});
+                    } else if (this._options[key] instanceof Font) {
+                        customization[key] = this._options[key].getUIFont({pointSize: 18});
+                    } else {
+                        // Assume this is a native iOS font Typeface
+                        customization[key] = this._options[key];
+                    }
+                } else {
+                    customization[key] = this._options[key];
+                }
+
             }
-            console.log(res);
-            this._notify("results", res);
         }
+    }
+
+
+    if (this._debug) {
+        console.log("Starting Scanning", customization);
+    }
+
+    const viewController = UIApplication.sharedApplication.keyWindow.rootViewController;
+    if (viewController) {
+        viewController.presentViewControllerAnimatedCompletion(this._xavierWrapper, false, null);
+        this._xavierWrapper.startScanningWithKeyDict(this._options["license key"], NSDictionary.alloc().initWithDictionary(customization));
+    }
+
+};
+
+Passport.prototype._close = function() {
+    if (this._hasClosedController) { return; }
+    this._hasClosedController = true;
+    const viewController = UIApplication.sharedApplication.keyWindow.rootViewController;
+    if (viewController) {
+        viewController.dismissViewControllerAnimatedCompletion(true, null);
+    }
+};
+
+Passport.prototype._onResult = function(rawDictionary) {
+    try {
+        this._close();
+        const res = shallowObjectFromDictionary(rawDictionary);
+        this._notify("results", res);
     } catch (err) {
         console.log("Error", err);
         this._onError(err);
@@ -213,33 +252,19 @@ Passport.prototype._onResult = function(rawString) {
 };
 
 
-
-/**
- * Start the scanning for Passport data
- */
-Passport.prototype.start = function() {
-    var xavierViewController = SCIXavierViewController.alloc().init(this._portrait);
-    xavierViewController._clientProtocol = this._delegate;
-    this._delegate._debug = this._debug;
-
-	const viewController = UIApplication.sharedApplication.keyWindow.rootViewController;
-    if (viewController) {            
-             if (!UIApplication.sharedApplication.delegate.respondsToSelector("window")) {
-                 throw new Error("Please see documentation on how to fix the iOS Responder");
-             }
-
-             viewController.presentViewControllerAnimatedCompletion(xavierViewController, false, null);        
-    }
-};
-
-
 module.exports = Passport;
 
 
-function runOnUIThread(owner, uiAction, state) {
-    dispatch_async(main_queue, function() {
-            uiAction.call(owner, state);
-    });
+function shallowObjectFromDictionary(dictionary) {
+    let keys = dictionary.allKeys;
+    let result = {};
 
-    return true;
+    for (let loop = 0; loop < keys.count; loop++) {
+        let key = keys[loop];
+        result[key] = dictionary.objectForKey(key);
+    }
+
+    return result;
 }
+
+
