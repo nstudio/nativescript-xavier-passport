@@ -251,6 +251,7 @@ Passport.prototype.activityResult = function(event) {
             return;
         }
 
+
         let results = fromHashMap(event.intent.getSerializableExtra(com.blacksharktech.xavierlib.XavierActivity.DOCUMENT_INFO));
         let bytes = event.intent.getByteArrayExtra(com.blacksharktech.xavierlib.XavierActivity.DOCUMENT_IMAGE);
         let bitmap = null;
@@ -258,12 +259,15 @@ Passport.prototype.activityResult = function(event) {
             bitmap = com.blacksharktech.xavierlib.PhotoUtil.convertByteArrayToBitmap(bytes);
         }
 
-        if (results && results.length > 0) {
+        if (results) {
+            if (bitmap) {
+                results["documentImage"] = bitmap;
+            }
             if (this._debug) {
                 console.log("Has Results");
                 console.log(results);
             }
-            this._handleData(results, bitmap);
+            this._handleData(results);
             return;
         }
     } catch (err) {
@@ -289,14 +293,17 @@ Passport.prototype._handleError = function(error) {
     }
 };
 
+
+
+
+
 /**
  * Parsed the Return data into a structure that can be used
  * @param rawMRZ
  * @private
  */
-Passport.prototype._handleData = function(data, image) {
+Passport.prototype._handleData = function(results) {
     try {
-        let results = {data: data, image: image};
 
         this._notify("results", results);
         this._notify("closed", null);
@@ -344,6 +351,17 @@ function toHashMap(obj) {
     return map;
 }
 
+
+function fixKey(key) {
+    let newKey = key.toString().toLowerCase();
+    let idx;
+    while ( (idx = newKey.indexOf("_")) > 0 ) {
+        newKey = newKey.slice(0,idx) + newKey.slice(idx+1, idx+2).toUpperCase() + newKey.slice(idx+2, newKey.length);
+        console.log(newKey);
+    }
+    return newKey;
+}
+
 /**
  * Converts from a Hash Map
  * @param javaObject
@@ -351,26 +369,28 @@ function toHashMap(obj) {
 function fromHashMap(javaObject) {
     let result = {};
     let iterator = javaObject.entrySet().iterator();
+
     while (iterator.hasNext()) {
         let item = iterator.next();
+        let key = fixKey(item.getKey());
         switch (item.getClass().getName()) {
             case 'java.util.HashMap':
-                result[item.getKey()] = fromHashMap(item.getValue());
+                result[key] = fromHashMap(item.getValue());
                 break;
             case 'java.lang.String':
-                result[item.getKey()] = String(item.getValue());
+                result[key] = String(item.getValue());
                 break;
             case 'java.lang.Boolean':
-                result[item.getKey()] = Boolean(String(item.getValue()));
+                result[key] = Boolean(String(item.getValue()));
                 break;
             case 'java.lang.Integer':
             case 'java.lang.Float':
             case 'java.lang.Long':
             case 'java.lang.Double':
-                result[item.getKey()] = Number(String(item.getValue()));
+                result[key] = Number(String(item.getValue()));
                 break;
             default:
-                result[item.getKey()] = item.getValue();
+                result[key] = item.getValue();
         }
     }
     return result;
