@@ -117,6 +117,47 @@ zp.on("results", function(results) { console.log("Results", results); });
 - `error`   - Will give you the error message from Xavier or if your results or close event code is buggy then the error from your code will be also passed back via this callback.
 - `closed`  - Will be triggered when it closes the scanning screen. (on iOS this is triggered several times)  
  
+### Result Object:
+documentImage - The image of the identity; this is either a native iOS image or Android Bitmap.
+
+documentType - The document type.
+
+countryCitizen - The code of the country/nationality of identity
+
+givenName - The given/first name of the identity.
+
+surname - The surname/last/family name
+
+documentNumber - The document number identity.
+
+countryIssue - The issuing country code
+
+dateBirth - Date of Birth; Returned in YYMMDD format
+
+sex - gender of identity.
+
+dateExpiration - Expiration date of identity in YYMMDD format
+
+optionalData - The optional data for a second line in a MRZ
+
+optionalData2 - The optional data for a thrid line in a MRZ
+
+stateIssue - Issuing state
+
+rawMrz - The unparsed MRZ read
+
+documentNumberCheckDigit - The check digit for the document number.
+
+dateBirthCheckDigit - The check digit for the date of birth
+
+dateExpirationCheckDigit - The check digit for the expiration date.
+
+optionalDataCheckDigit - The check digit for the optional data
+
+compositeCheckDigit - The check digit over the document number, birth date, expiration date, optional data, and their check digits
+                      
+
+
 ## Demo
  
  Please see the demo source (See: main-view-model.js).
