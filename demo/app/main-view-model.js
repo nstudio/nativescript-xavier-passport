@@ -17,13 +17,7 @@ if (licenseKey === "Your License Key") {
         licenseKey = require("./license.key.js");
     } catch (err) {
         console.log("Missing key", err);
-        licenseKey = "";  // No License Key
     }
-}
-
-// Throw an error if no license key is setup!
-if (licenseKey === "Your License Key" || licenseKey === "") {
-    throw new Error("You are missing your License key");
 }
 
 const pp = new Passport({

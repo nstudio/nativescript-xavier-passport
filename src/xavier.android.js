@@ -6,7 +6,7 @@
  * We do contract work in most languages, so let us solve your problems!
  *
  * Any questions please feel free to email me or put a issue up on the github repo
- * Version 2.0.0                                            NAnderson@nstudio.io
+ * Version 2.0.2                                            NAnderson@nstudio.io
  ************************************************************************************/
 "use strict";
 /* global android, require, com, java, javax, global, com.blacksharktech */
@@ -314,6 +314,8 @@ Passport.prototype._handleData = function(results) {
     }
 };
 
+// JS & TS exports; (TS expects it to be a key, JS frequently is root)
+Passport.Passport = Passport;
 module.exports = Passport;
 
 

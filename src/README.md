@@ -57,9 +57,11 @@ Run `tns plugin add @nstudio/nativescript-xavier-passport` in your ROOT director
 ## Android Required Setup
 In your app/App_Resources/Android/src/main/res/AndroidManifest.xml you need to do the following:
 1. Add `xmlns:tools="http://schemas.android.com/tools"` to the `<Manifest ...`
-2. In the `<uses-sdk` change the android:minSdkVersion="XX" to at least 21.
-3. Int the `<application` add `tools:replace="android:allowBackup"`  
+2. Int the `<application` add `tools:replace="android:allowBackup"`  
 ![Files](../docs/xavier_android_manifest.png)
+3a. In the `<uses-sdk` change the android:minSdkVersion="XX" to at least 21.
+3b. If you are using a newer version of NativeScript and your file does NOT have a <uses-sdk; then you need to change the app/App_Resources/Android/app.gradle file.   Change `minSdkVersion` to at least 21
+
 
 
 ## Usage

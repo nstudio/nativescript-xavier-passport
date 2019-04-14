@@ -1,9 +1,9 @@
 {
   "name": "@nstudio/nativescript-xavier-passport",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A Passport/MRZ reader for NativeScript",
   "main": "xavier",
-  "typings": "xavier.d.ts",
+  "typings": "index.d.ts",
   "nativescript": {
 	"platforms": {
 		"android": "5.0.0",
