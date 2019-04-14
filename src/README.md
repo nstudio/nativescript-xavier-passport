@@ -41,11 +41,12 @@ This is a NativeScript cross platform plugin wrapping the Black Shark Tech Xavie
 
 Our code is 2018-2019, nStudio, LLC.  Everything is LICENSED under the APACHE 2.0 License, meaning you are free to include this in any type of program.  
 
-However, the base Xavier library must be licensed from them see: 
-https://github.com/BlackSharkTech/Xavier-demo-android
-and 
-https://github.com/BlackSharkTech/Xavier-demo-ios
-To get a real license key you need to contact sales @ blacksharktech.com
+
+However, the native Xavier library must be licensed from Black Stark Technology 
+
+https://github.com/BlackSharkTech/Xavier-demo-android and https://github.com/BlackSharkTech/Xavier-demo-ios
+
+To get a real license key you need to contact sales @ blacksharktech.com however, you can use any string to test the library.
 
 
 
@@ -67,13 +68,22 @@ In your app/App_Resources/Android/src/main/res/AndroidManifest.xml you need to d
 ## Usage
 
 ### Start Scanning
+**JavaScript:**
 ```js
 const Passport = require('@nstudio/nativescript-xavier-passport');
 
-const zp = new Passport({"licenseKey": "<LICENSE_KEY>"});
+const zp = new Passport({licenseKey: "<LICENSE_KEY>"});
 zp.on("results", function(results) { console.log("Results:", results); });
 zp.start();
 
+```
+
+**TypeScript:**
+```typescript
+import { Passport } from '@nstudio/nativescript-xavier-passport';
+const zp = new Passport({licenseKey: "<LICENSEKEY>"});
+zp.on("results", (results) => { console.log("Results:", results); });
+zp.start();
 ```
 
 
