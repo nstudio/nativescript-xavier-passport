@@ -78,19 +78,19 @@ zp.start();
 ### Instantiating the Passport Object
 #### new Password(options)
 #### Options:
-- licenseKey = Your license key (Can be any string for Testing!)
-- boundingBoxSearchingColor =  Color of the bounding box
-- boundingBoxFoundColor = Color of the bounding box when found
-- closeButtonColor = Close button color
-- flashOnButtonColor = Flash on button color
-- flashOffButtonColor = Flash off button color
-- flashButtonEnabled = (true/false) Display the flash button
-- instructionTextEnabled = (true/false) Display instructional text in camera 
-- instructionText = Text to display
-- instructionTextColor = Text color
-- instructionTextFont = Font to use
-- cameraNegativeSpaceBackgroundEnabled = Background space 
-- cameraNegativeSpaceBackgroundColor = Background color
+- **licenseKey** = Your license key (Can be any string for Testing!)
+- **boundingBoxSearchingColor** =  Color of the bounding box
+- **boundingBoxFoundColor** = Color of the bounding box when found
+- **closeButtonColor** = Close button color
+- **flashOnButtonColor** = Flash on button color
+- **flashOffButtonColor** = Flash off button color
+- **flashButtonEnabled** = (true/false) Display the flash button
+- **instructionTextEnabled** = (true/false) Display instructional text in camera 
+- **instructionText** = Text to display
+- **instructionTextColor** = Text color
+- **instructionTextFont** = Font to use
+- **cameraNegativeSpaceBackgroundEnabled** = Background space 
+- **cameraNegativeSpaceBackgroundColor** = Background color
 
 
 
@@ -118,43 +118,43 @@ zp.on("results", function(results) { console.log("Results", results); });
 - `closed`  - Will be triggered when it closes the scanning screen. (on iOS this is triggered several times)  
  
 ### Result Object:
-documentImage - The image of the identity; this is either a native iOS image or Android Bitmap.
+- **documentImage** - The image of the identity; this is either a native iOS image or Android Bitmap.  You can assign it to a ImageSource using the `fromNativeSource()` function.
 
-documentType - The document type.
+- **documentType** - The document type.
 
-countryCitizen - The code of the country/nationality of identity
+- **countryCitizen** - The code of the country/nationality of identity
 
-givenName - The given/first name of the identity.
+- **givenName** - The given/first name of the identity.
 
-surname - The surname/last/family name
+- **surname** - The surname/last/family name
 
-documentNumber - The document number identity.
+- **documentNumber** - The document number identity.
 
-countryIssue - The issuing country code
+- **countryIssue** - The issuing country code
 
-dateBirth - Date of Birth; Returned in YYMMDD format
+- **dateBirth** - Date of Birth; Returned in YYMMDD format
 
-sex - gender of identity.
+- **sex** - gender of identity.
 
-dateExpiration - Expiration date of identity in YYMMDD format
+- **dateExpiration** - Expiration date of identity in YYMMDD format
 
-optionalData - The optional data for a second line in a MRZ
+- **optionalData** - The optional data for a second line in a MRZ
 
-optionalData2 - The optional data for a thrid line in a MRZ
+- **optionalData2** - The optional data for a thrid line in a MRZ
 
-stateIssue - Issuing state
+- **stateIssue** - Issuing state
 
-rawMrz - The unparsed MRZ read
+- **rawMrz** - The unparsed MRZ read
 
-documentNumberCheckDigit - The check digit for the document number.
+- **documentNumberCheckDigit** - The check digit for the document number.
 
-dateBirthCheckDigit - The check digit for the date of birth
+- **dateBirthCheckDigit** - The check digit for the date of birth
 
-dateExpirationCheckDigit - The check digit for the expiration date.
+- **dateExpirationCheckDigit** - The check digit for the expiration date.
 
-optionalDataCheckDigit - The check digit for the optional data
+- **optionalDataCheckDigit** - The check digit for the optional data
 
-compositeCheckDigit - The check digit over the document number, birth date, expiration date, optional data, and their check digits
+- **compositeCheckDigit** - The check digit over the document number, birth date, expiration date, optional data, and their check digits
                       
 
 
