@@ -26,7 +26,7 @@ const XavierWDelegate = NSObject.extend({
     _debug: false,
     didFinishTaskWithStatusData: function(status, data) {
         if (this._debug) {
-            console.log("!!!!! Callback", status);
+            console.log("Callback", status);
         }
         const owner = this._owner.get();
         if (owner) {
@@ -124,7 +124,7 @@ Passport.prototype.removeEventListener = function(event, callback, thisArg) {
  * @private
  */
 Passport.prototype._notify = function (event) {
-    console.log("Notify", event);
+    //console.log("Notify", event);
     const eh = this._callbacks[event];
     const args = Array.prototype.slice.call(arguments, 1);
     if (typeof eh !== 'undefined' && eh.length) {
@@ -147,7 +147,7 @@ Passport.prototype.off = Passport.prototype.removeEventListener;
 
 Passport.prototype._onClose = function() {
     if (this._closeHack && this._alreadyClosed) { return; }
-    this._close()
+    this._close();
     this._alreadyClosed = true;
     this._notify("closed");
 };
@@ -161,7 +161,7 @@ Passport.prototype.start = function() {
     this._alreadyClosed = false;
     this._hasClosedController = false;
 
-    if (!this._options || !this._options["license key"]) {
+    if (!this._options || !this._options["licenseKey"]) {
         this._onError("Missing License key");
         this._onClose();
         return false;
@@ -226,7 +226,7 @@ Passport.prototype.start = function() {
     const viewController = UIApplication.sharedApplication.keyWindow.rootViewController;
     if (viewController) {
         viewController.presentViewControllerAnimatedCompletion(this._xavierWrapper, false, null);
-        this._xavierWrapper.startScanningWithKeyDict(this._options["license key"], NSDictionary.alloc().initWithDictionary(customization));
+        this._xavierWrapper.startScanningWithKeyDict(this._options["licenseKey"], NSDictionary.alloc().initWithDictionary(customization));
     }
 
 };
@@ -246,7 +246,9 @@ Passport.prototype._onResult = function(rawDictionary) {
         const res = shallowObjectFromDictionary(rawDictionary);
         this._notify("results", res);
     } catch (err) {
-        console.log("Error", err);
+        if (this._debug) {
+            console.error("Error", err);
+        }
         this._onError(err);
     }
 };

@@ -9,7 +9,7 @@
  * Version 2.0.0                                            NAnderson@nstudio.io
  ************************************************************************************/
 "use strict";
-/* global android, com, java, javax, global, com.blacksharktech */
+/* global android, require, com, java, javax, global, com.blacksharktech */
 
 const permissions = require("nativescript-permissions");
 const application = require("application");
@@ -54,7 +54,7 @@ function Passport(options) {
         "cameraNegativeSpaceBackgroundColor": null,
     };
 
-    var customization=null;
+    let customization=null;
     if (options) {
         for (let key in options) {
             if (options.hasOwnProperty(key) && validOptions.hasOwnProperty(key)) {
@@ -87,7 +87,7 @@ function Passport(options) {
                 } else {
                     customization[key] = options[key];
                 }
-            } else if (key === "license key") {
+            } else if (key === "licenseKey") {
                 continue;
             } else {
                 console.error("Passport Options does not contain a valid key", key);
@@ -98,7 +98,7 @@ function Passport(options) {
     }
 
 
-    com.blacksharktech.xavierlib.XavierSDK.getInstance().setAppKey(options['license key']);
+    com.blacksharktech.xavierlib.XavierSDK.getInstance().setAppKey(options['licenseKey']);
     if (customization) {
         com.blacksharktech.xavierlib.XavierSDK.getInstance().setCustomization(customization);
     }
@@ -164,11 +164,11 @@ Passport.prototype.removeEventListener = function(event, callback, thisArg) {
  * @private
  */
 Passport.prototype._notify = function(event) {
-    var eh = this._callbacks[event];
-    var args = Array.prototype.slice.call(arguments, 1);
+    const eh = this._callbacks[event];
+    const args = Array.prototype.slice.call(arguments, 1);
     if (typeof eh !== 'undefined' && eh.length) {
-        for (var i = 0; i < eh.length; i++) {
-            var thisArg = eh[i].thisArg || this;
+        for (let i = 0; i < eh.length; i++) {
+            const thisArg = eh[i].thisArg || this;
             eh[i].callback.apply(thisArg, args);
         }
     }
@@ -216,7 +216,7 @@ Passport.prototype._start = function() {
 
     application.android.on("activityResult", this._activityResult);
 
-    var intent = new android.content.Intent(application.android.context, com.blacksharktech.xavierlib.XavierActivity.class);
+    const intent = new android.content.Intent(application.android.context, com.blacksharktech.xavierlib.XavierActivity.class);
     intent.setFlags(android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
     application.android.foregroundActivity.startActivityForResult(intent, this._requestID);
 };
@@ -264,14 +264,15 @@ Passport.prototype.activityResult = function(event) {
                 results["documentImage"] = bitmap;
             }
             if (this._debug) {
-                console.log("Has Results");
-                console.log(results);
+                console.log("Has Results",results);
             }
             this._handleData(results);
             return;
         }
     } catch (err) {
-        console.error("Error", err, err.stack);
+        if (this._debug) {
+            console.error("Error", err, err.stack);
+        }
         this._handleError(err);
         return;
     }
@@ -328,7 +329,7 @@ function toHashMap(obj) {
         if (!obj.hasOwnProperty(property)) { continue; }
         if (obj[property] == null) { continue; }
 
-        var val = obj[property];
+        const val = obj[property];
         switch (typeof val) {
             case 'object':
                 map.put(property, toHashMap(val, map));
@@ -357,7 +358,7 @@ function fixKey(key) {
     let idx;
     while ( (idx = newKey.indexOf("_")) > 0 ) {
         newKey = newKey.slice(0,idx) + newKey.slice(idx+1, idx+2).toUpperCase() + newKey.slice(idx+2, newKey.length);
-        console.log(newKey);
+        //console.log(newKey);
     }
     return newKey;
 }

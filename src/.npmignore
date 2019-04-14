@@ -4,3 +4,5 @@ demo/
 *.tgz
 *.zip
 .npmignore
+node_modules
+nativescript_xavier_passport.aar

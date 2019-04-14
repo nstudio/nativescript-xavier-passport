@@ -6,8 +6,7 @@ const ObservableArray = require("data/observable-array").ObservableArray;
 // This is the Plugin to require
 const Passport = require('@nstudio/nativescript-xavier-passport');
 
-/** iOS requires the Key and email put in the App_Resources/iOS/Xavier.plist file **/
-/** Android requires the Key put here **/
+/** Put the Key here **/
 
 // Put your license key here...
 let licenseKey = "Your License Key";
@@ -28,7 +27,7 @@ if (licenseKey === "Your License Key" || licenseKey === "") {
 }
 
 const pp = new Passport({
-    "license key": licenseKey,
+    "licenseKey": licenseKey,
     "boundingBoxSearchingColor": "#FF0000",
     "instructionTextEnabled": true,
     "instructionText": "Hi these are instructions",
