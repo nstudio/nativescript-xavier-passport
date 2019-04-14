@@ -45,6 +45,8 @@ However, the base Xavier library must be licensed from them see:
 https://github.com/BlackSharkTech/Xavier-demo-android
 and 
 https://github.com/BlackSharkTech/Xavier-demo-ios
+To get a real license key you need to contact sales @ blacksharktech.com
+
 
 
 ## Installation 
@@ -64,7 +66,7 @@ In your app/App_Resources/Android/src/main/res/AndroidManifest.xml you need to d
 
 ### Start Scanning
 ```js
-const Passport = require('nativescript-xavier-passport');
+const Passport = require('@nstudio/nativescript-xavier-passport');
 
 const zp = new Passport({"licenseKey": "<LICENSE_KEY>"});
 zp.on("results", function(results) { console.log("Results:", results); });
@@ -76,7 +78,7 @@ zp.start();
 ### Instantiating the Passport Object
 #### new Password(options)
 #### Options:
-- licenseKey = Your license key
+- licenseKey = Your license key (Can be any string for Testing!)
 - boundingBoxSearchingColor =  Color of the bounding box
 - boundingBoxFoundColor = Color of the bounding box when found
 - closeButtonColor = Close button color
@@ -99,6 +101,9 @@ Will enable more logs to be output to the log system.
 Might be required for iOS; last version of MRZ had issue with notification of closing; so we have a work around...
 
 ### .start()
+```js
+zp.start();
+```
 Start the scanning
 
 ### Events
@@ -108,7 +113,7 @@ zp.on("closed", function() { console.log("Closed the reader"); });
 zp.on("results", function(results) { console.log("Results", results); });
 ```
 
-- `results` - Will give you an object with keys for everything including the raw data as the "raw" key.
+- `results` - Will give you an object with keys for everything including the raw data as the "rawMrz" key.
 - `error`   - Will give you the error message from Xavier or if your results or close event code is buggy then the error from your code will be also passed back via this callback.
 - `closed`  - Will be triggered when it closes the scanning screen. (on iOS this is triggered several times)  
  

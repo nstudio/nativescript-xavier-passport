@@ -353,6 +353,11 @@ function toHashMap(obj) {
 }
 
 
+/***
+ * Converts a Key like "HI_THIS_IS_A_TEST" to "hiThisIsATest"
+ * @param key
+ * @returns {string}
+ */
 function fixKey(key) {
     let newKey = key.toString().toLowerCase();
     let idx;
